@@ -79,16 +79,28 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState?.validate() ?? false) {
-                    final updatedUser = Usuario(
-                      id: widget.usuario.id,
-                      nome: _nomeController.text,
-                      email: _emailController.text,
-                      telefone: _telefoneController.text,
-                    );
+                    try {
+                      final updatedUser = Usuario(
+                        id: widget.usuario.id,
+                        nome: _nomeController.text,
+                        email: _emailController.text,
+                        telefone: _telefoneController.text,
+                      );
 
-                    await DatabaseHelper.instance.updateUsuario(updatedUser);
+                      await DatabaseHelper.instance.updateUsuario(updatedUser);
 
-                    Navigator.pop(context, true); // Retorna true ao salvar
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content: Text('Usuário atualizado com sucesso')),
+                      );
+
+                      Navigator.pop(context, true); // Retorna true ao salvar
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content: Text('Erro ao atualizar o usuário: $e')),
+                      );
+                    }
                   }
                 },
                 child: Text('Salvar alterações'),
@@ -100,9 +112,21 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                 ),
                 onPressed: () async {
                   if (widget.usuario.id != null) {
-                    await DatabaseHelper.instance
-                        .deleteUsuario(widget.usuario.id!);
-                    Navigator.pop(context, true); // Retorna true ao excluir
+                    try {
+                      await DatabaseHelper.instance
+                          .deleteUsuario(widget.usuario.id!);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Usuário deletado com sucesso')),
+                      );
+
+                      Navigator.pop(context, true); // Retorna true ao excluir
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content: Text('Erro ao deletar o usuário: $e')),
+                      );
+                    }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

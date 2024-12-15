@@ -75,5 +75,15 @@ class DatabaseHelper {
     );
   }
 
-  getUsuarios() {}
+  Future<List<Usuario>> getUsuarios() async {
+    final db = await instance.database;
+    final List<Map<String, dynamic>> maps = await db.query('usuarios');
+
+    // Verifica se há resultados e os converte para uma lista de objetos Usuario
+    if (maps.isNotEmpty) {
+      return maps.map((map) => Usuario.fromMap(map)).toList();
+    } else {
+      return []; // Retorna uma lista vazia se não houver usuários
+    }
+  }
 }
