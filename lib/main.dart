@@ -4,7 +4,7 @@ import 'models/usuario.dart';
 import 'screens/user_detail_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Teste do banco de dados',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: UserListScreen(),
+      home: const UserListScreen(),
     );
   }
 }
@@ -47,30 +47,22 @@ class _UserListScreenState extends State<UserListScreen> {
   void _navigateToAddUser() async {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AddUserScreen()),
+      MaterialPageRoute(builder: (context) => const AddUserScreen()),
     );
-    _loadUsuarios(); // Atualiza a lista após retornar
+    _loadUsuarios();
   }
 
   void _fetchUsuarios() async {
     try {
       final usuarios = await DatabaseHelper.instance.getUsuarios();
 
-      // Certifique-se de que 'usuarios' não seja nulo
-      if (usuarios != null) {
-        setState(() {
-          _usuarios = usuarios;
-        });
-      } else {
-        setState(() {
-          _usuarios = []; // Define como lista vazia se não houver dados
-        });
-      }
+      setState(() {
+        _usuarios = usuarios;
+      });
     } catch (e) {
       print('Erro ao buscar usuários: $e');
-      // Exibe uma mensagem de erro se algo der errado
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro ao carregar usuários')),
+        const SnackBar(content: Text('Erro ao carregar usuários')),
       );
     }
   }
@@ -89,7 +81,6 @@ class _UserListScreenState extends State<UserListScreen> {
                   title: Text(usuario.nome),
                   subtitle: Text(usuario.email),
                   onTap: () async {
-                    // Ao clicar no nome do usuário, abre a tela de detalhes
                     final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -97,9 +88,8 @@ class _UserListScreenState extends State<UserListScreen> {
                             UserDetailScreen(usuario: usuario),
                       ),
                     );
-                    // Se o resultado for verdadeiro (usuário editado ou excluído), atualiza a lista
                     if (result == true) {
-                      _fetchUsuarios(); // Atualiza a lista após edições ou exclusões
+                      _fetchUsuarios();
                     }
                   },
                 );

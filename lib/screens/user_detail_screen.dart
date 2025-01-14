@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import '../models/usuario.dart'; // Substitua pelo caminho correto para o modelo 'Usuario'
-import '../database/database_helper.dart'; // Substitua pelo caminho correto para o helper do banco de dados
+import '../models/usuario.dart';
+import '../database/database_helper.dart';
 
 class UserDetailScreen extends StatefulWidget {
   final Usuario usuario;
 
-  UserDetailScreen({required this.usuario});
+  const UserDetailScreen({super.key, required this.usuario});
 
   @override
   _UserDetailScreenState createState() => _UserDetailScreenState();
@@ -37,7 +37,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalhes do Usuário'),
+        title: const Text('Detalhes do Usuário'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -47,7 +47,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             children: [
               TextFormField(
                 controller: _nomeController,
-                decoration: InputDecoration(labelText: 'Nome'),
+                decoration: const InputDecoration(labelText: 'Nome'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, insira o nome';
@@ -57,7 +57,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
               ),
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(labelText: 'Email'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, insira o email';
@@ -67,7 +67,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
               ),
               TextFormField(
                 controller: _telefoneController,
-                decoration: InputDecoration(labelText: 'Telefone'),
+                decoration: const InputDecoration(labelText: 'Telefone'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, insira o telefone';
@@ -75,7 +75,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState?.validate() ?? false) {
@@ -90,11 +90,11 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                       await DatabaseHelper.instance.updateUsuario(updatedUser);
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                             content: Text('Usuário atualizado com sucesso')),
                       );
 
-                      Navigator.pop(context, true); // Retorna true ao salvar
+                      Navigator.pop(context, true);
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -103,9 +103,9 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                     }
                   }
                 },
-                child: Text('Salvar alterações'),
+                child: const Text('Salvar alterações'),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
@@ -117,10 +117,11 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                           .deleteUsuario(widget.usuario.id!);
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Usuário deletado com sucesso')),
+                        const SnackBar(
+                            content: Text('Usuário deletado com sucesso')),
                       );
 
-                      Navigator.pop(context, true); // Retorna true ao excluir
+                      Navigator.pop(context, true);
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -129,13 +130,13 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                     }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
+                      const SnackBar(
                           content:
                               Text('Erro: ID do usuário não pode ser nulo')),
                     );
                   }
                 },
-                child: Text('Deletar Usuário'),
+                child: const Text('Deletar Usuário'),
               ),
             ],
           ),

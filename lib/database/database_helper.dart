@@ -3,7 +3,7 @@ import 'package:projeto_integrador/models/usuario.dart';
 
 class DatabaseHelper {
   DatabaseHelper._privateConstructor();
-  // Use sqflite_common_ffi para inicializar o banco de dados na web
+
   static final DatabaseHelper instance = DatabaseHelper._init();
   static Database? _database;
 
@@ -12,10 +12,8 @@ class DatabaseHelper {
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    // Inicializar a fábrica de banco de dados para FFI (web)
     databaseFactory = databaseFactoryFfi;
 
-    // Inicializar o banco de dados
     _database = await _initDB();
     return _database!;
   }
@@ -25,11 +23,9 @@ class DatabaseHelper {
     final dbPath = await getDatabasesPath();
     final path = '$dbPath/projeto_integrador.db';
 
-    // Abrir o banco de dados
     return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
 
-  // Criar as tabelas no banco de dados
   Future _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE usuarios(
@@ -41,7 +37,6 @@ class DatabaseHelper {
     ''');
   }
 
-  // Funções para inserção, atualização, deleção e leitura dos usuários
   Future<int> insertUsuario(Usuario usuario) async {
     final db = await instance.database;
     return await db.insert('usuarios', usuario.toMap());
@@ -79,11 +74,10 @@ class DatabaseHelper {
     final db = await instance.database;
     final List<Map<String, dynamic>> maps = await db.query('usuarios');
 
-    // Verifica se há resultados e os converte para uma lista de objetos Usuario
     if (maps.isNotEmpty) {
       return maps.map((map) => Usuario.fromMap(map)).toList();
     } else {
-      return []; // Retorna uma lista vazia se não houver usuários
+      return [];
     }
   }
 }
